@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OpenURL : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    public InputField m_fieldToOpen;
+
+    public void OpenUrl(string url) {
+        Application.OpenURL(url);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OpenUrlFromInputField()
     {
-        
+        if(m_fieldToOpen!=null)
+        Application.OpenURL(m_fieldToOpen.text);
     }
 }

@@ -27,6 +27,7 @@ public class UI_WikiGitDownloader : MonoBehaviour
         m_projectPath.text = PlayerPrefs.GetString("UI_WikiGitDownloader");
         if (m_projectPath.text == "")
             m_projectPath.text = Application.dataPath;
+        m_loadImages.SetProjectPath(m_projectPath.text);
 
     }
 
@@ -97,6 +98,23 @@ public class UI_WikiGitDownloader : MonoBehaviour
             SetAsNoProjetPath();
         }
 
+    }
+
+    public void RemoveAllLocal()
+    {
+        foreach (UI_MarkDownImageEdit item in GameObject.FindObjectsOfType<UI_MarkDownImageEdit>())
+        {
+            if (item.m_givenData.markdownImage.IsImagesFolder())
+                item.AutoDestroy();
+        }
+       
+    }
+    public void RemoveAllWeb() {
+        foreach (UI_MarkDownImageEdit item in GameObject.FindObjectsOfType<UI_MarkDownImageEdit>())
+        {
+            if (item.m_givenData.markdownImage.IsWebLink())
+                item.AutoDestroy();
+        }
     }
 
     private void SetAsNoProjetPath()

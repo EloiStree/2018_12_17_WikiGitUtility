@@ -37,7 +37,18 @@ public class LoadAllImagesInProjectLocaly : MonoBehaviour
         throw new System.NotImplementedException("");
         //Check and return a list of MardownImage that should be on the /Image/ folder but are not.
     }
-    
+
+
+    public static string random = "0123456789abcdeflghijklmnopkrstuvxyz";
+    public static string RandomName()
+    {
+        string randomName = "";
+        for (int i = 0; i < 32; i++)
+        {
+            randomName += random[UnityEngine.Random.Range(0, random.Length)];
+        }
+        return randomName;
+    }
 
     internal List<MarkdownImageInFile> LoadAllWebImagesReference(string gitProjectPath)
     {
@@ -134,6 +145,14 @@ public class LoadAllImagesInProjectLocaly : MonoBehaviour
             }
         }
 
+    }
+    public void OpenProjectImageDirectory()
+    {
+        Application.OpenURL(m_gitProjetPath + "/Image/");
+    }
+    public void OpenProjectDirectory()
+    {
+        Application.OpenURL(m_gitProjetPath );
     }
 
     private string CheckForExtension(string link)

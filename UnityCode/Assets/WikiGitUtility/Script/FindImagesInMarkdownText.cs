@@ -88,6 +88,7 @@ public class MarkdownImageAsText {
 
     public string GetImageLink() {
      Match match =  Regex.Match(m_text, m_linkPattern);
+
         return match.Value.Substring(2, match.Value.Length - 3);
     }
     public string GetImageLabel() {
@@ -135,5 +136,10 @@ public class MarkdownImageAsText {
     {
         return m_text;
     }
-    
+
+    internal static MarkdownImageAsText CreateMarkdownImage(string alt, string url)
+    {
+        string md = string.Format("![{0}]({1})", alt==""?" ":alt, url== "" ? " " : url);
+        return new MarkdownImageAsText(md);
+    }
 }
