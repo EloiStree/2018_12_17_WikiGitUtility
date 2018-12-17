@@ -4,5 +4,5 @@ Unity utility application to work offline with wiki store on git repertory
 
 --------------------------------------
 
-[![](https://img.youtube.com/vi/iEuEpdkuDoE/2.jpg)](https://youtu.be/iEuEpdkuDoE)  
+[![Disney Death Count](https://img.youtube.com/vi/iEuEpdkuDoE/maxresdefault.jpg)](https://youtu.be/iEuEpdkuDoE)  
 https://youtu.be/iEuEpdkuDoE
