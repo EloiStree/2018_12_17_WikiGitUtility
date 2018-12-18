@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class UI_UrlToMarkdownText : MonoBehaviour
     [Header("Input")]
     public InputField m_altText;
     public InputField m_image;
+    public InputField m_imageLink;
     public InputField m_youtube;
     public Dropdown m_dropdown;
     public LoadAllImagesInProjectLocaly m_localDownloader;
@@ -29,6 +31,7 @@ public class UI_UrlToMarkdownText : MonoBehaviour
     void Start()
     {
         m_image.onEndEdit.AddListener(DownloadImage);
+        m_imageLink.onEndEdit.AddListener(DownloadImageWithLink);
         m_youtube.onEndEdit.AddListener(DownloadYoutube);
         m_dropdown.onValueChanged.AddListener(DownloadYoutube);
     }
@@ -58,18 +61,35 @@ public class UI_UrlToMarkdownText : MonoBehaviour
         }
     }
 
+
+    public void DownloadImageLocaly()
+    {
+        DownloadImageLocaly(m_image.text);
+
+    }
     
+    
+    public void DownloadImageLocaly(string path)
+    {
 
-    public void DownloadImageLocaly() {
-
-        string name =  LoadAllImagesInProjectLocaly.RandomName();
-        MarkdownImageAsText t = MarkdownImageAsText.CreateMarkdownImage(m_altText.text, m_image.text);
+        string name = LoadAllImagesInProjectLocaly.RandomName();
+        MarkdownImageAsText t = MarkdownImageAsText.CreateMarkdownImage(m_altText.text, path);
         StartCoroutine(LoadAllImagesInProjectLocaly.StartDownloadingImage(
-          t,name));
-        t.SetUrlTo("Image/" + name +"."+ t.GetFileExtension());
-        SetText(t.GetText());
+          t, name));
+        t.SetUrlTo("Image/" + name + "." + t.GetFileExtension());
+
+        if (m_imageLink.text == "")
+            SetText(t.GetText());
+        else
+            SetText(LinkTheText(t.GetText(), m_imageLink.text));
         StartCoroutine(StartDownloadPreview(m_image.text));
     }
+
+    private string LinkTheText(string text, string url)
+    {
+        return "[" + text.Trim() + "](" + url.Trim() + ")";
+    }
+
     private string GetYoutubeImageUrl()
     {
         return YoutubeThumbnail.GetImageUrlFromUrl(m_youtube.text, (YoutubeThumbnail.YoutubeImageType)m_dropdown.value);
@@ -91,11 +111,51 @@ public class UI_UrlToMarkdownText : MonoBehaviour
     }
 
 
-
-    private void DownloadImage(string value)
+    private void DownloadImage()
     {
-        SetText( string.Format("![{0}]({1})  ", m_altText.text, value));
-        StartCoroutine(StartDownloadPreview(value));
+        DownloadImage(m_image.text);
+
     }
-    
+    public void DownloadImageWithLink(string text)
+    {
+        DownloadImage(m_image.text);
+
+    }
+    private void DownloadImage(string url)
+    {
+        string text = string.Format("![{0}]({1})  ", m_altText.text,  url);
+
+        if (m_imageLink.text == "")
+            SetText(text);
+        else
+            SetText(LinkTheText(text, m_imageLink.text));
+        StartCoroutine(StartDownloadPreview(url));
+    }
+
+
+    public void DownloadImageFromDevicePathInProjet(string path) {
+        if (!File.Exists(path)) return;
+        string extention = Path.GetExtension(path);
+        bool isImage= IsImageAllow(extention);
+        if (!isImage)
+            return;
+        string filePath = "file:///" + path;
+        DownloadImageLocaly(filePath);
+        StartCoroutine(StartDownloadPreview(filePath));
+       
+    }
+
+    private bool IsImageAllow(string extention)
+    {
+        switch (extention.ToLower())
+        {
+            case ".jpg": return true;
+            case ".jpeg": return true;
+            case ".png": return true;
+            case ".gif": return true;
+            default:
+                break;
+        }
+        return false;
+    }
 }

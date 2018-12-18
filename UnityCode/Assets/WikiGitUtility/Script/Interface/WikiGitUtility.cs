@@ -85,7 +85,17 @@ public interface MarkdownUtilityInterface {
     //...
     #endregion
 
+    #region COMPLEMENTARY
+    bool IsPathFromWeb(string urlOrPath);
+    bool IsPathFromDevice(string urlOrPath);
+    bool IsPathRelative(string path);
+    bool IsPathAbsolute(string path);
+    string GetFilePathExtension(string path);
 
+    bool IsImageFile(string filePath);
+    bool IsMarkdownFile(string filePath);
+
+    #endregion
 }
 
 public class WikiGitUtilityMono : MonoBehaviour

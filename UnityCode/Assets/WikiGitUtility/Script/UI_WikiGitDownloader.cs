@@ -28,6 +28,7 @@ public class UI_WikiGitDownloader : MonoBehaviour
         if (m_projectPath.text == "")
             m_projectPath.text = Application.dataPath;
         m_loadImages.SetProjectPath(m_projectPath.text);
+        CheckIfPathIsGitRootFolder();
 
     }
 
