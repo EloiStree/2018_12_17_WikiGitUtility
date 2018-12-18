@@ -8,3 +8,6 @@ https://youtu.be/wIP4mXfNVJU
 ## Day 2: Web & Youtube to markdwon
 [![Default Alt](https://img.youtube.com/vi/xg33sr2MKDs/mqdefault.jpg)](https://youtu.be/xg33sr2MKDs?t=123)  
 https://youtu.be/xg33sr2MKDs?t=123
+
+[![Default Alt](https://img.youtube.com/vi/xg33sr2MKDs/maxresdefault.jpg)](https://youtu.be/xg33sr2MKDs)  
+https://youtu.be/xg33sr2MKDs
