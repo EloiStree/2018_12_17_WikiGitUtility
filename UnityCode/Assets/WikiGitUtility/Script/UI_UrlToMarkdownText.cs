@@ -103,10 +103,20 @@ public class UI_UrlToMarkdownText : MonoBehaviour
     
 
     public IEnumerator StartDownloadPreview( string url) {
+        byte[] b;
+        string data = MarkdownUtility.Default.GetDataUrlContent(url, out b);
+        string ext = MarkdownUtility.Default.GetFilePathExtension(url);
+        if ( ! string.IsNullOrEmpty(data) ) {
+            url = Application.temporaryCachePath + "/data." + ext;
+            Debug.Log("U:" + Application.temporaryCachePath);
+            File.WriteAllBytes(url, b);
+        }
 
         WWW www = new WWW(url);
         yield return www;
+
         m_imagePreview.texture = www.texture;
+
         if( www.texture!=null)
             m_ratioFilter.aspectRatio = (float)www.texture.width/ (float)www.texture.height;
     }

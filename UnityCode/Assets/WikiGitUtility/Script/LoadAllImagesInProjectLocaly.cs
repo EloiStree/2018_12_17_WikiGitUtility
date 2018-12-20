@@ -115,6 +115,19 @@ public class LoadAllImagesInProjectLocaly : MonoBehaviour
             Debug.Log("lll:" + path);
 
 
+            byte[] b;
+            string data = MarkdownUtility.Default.GetDataUrlContent(path, out b);
+            string ext = MarkdownUtility.Default.GetFilePathExtension(path);
+            if (!string.IsNullOrEmpty(data))
+            {
+                path = Application.temporaryCachePath + "/data." + ext;
+                Debug.Log("U:" + Application.temporaryCachePath);
+                File.WriteAllBytes(path, b);
+            }
+
+
+
+
             WWW download = new WWW(path);
             yield return download;
             if (download != null || string.IsNullOrEmpty(download.error))
