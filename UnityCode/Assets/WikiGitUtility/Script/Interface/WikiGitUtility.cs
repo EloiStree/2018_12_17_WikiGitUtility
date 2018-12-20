@@ -45,58 +45,6 @@ public interface WikiGitCurrentProjectUtilityInterface {
 }
 
 
-public interface MarkdownUtilityInterface {
-    #region SIMPLE
-
-    string Italic(string text);// *Italic Text* || _Italic Text_
-    string Strong(string text); // **Strong text**
-    string Underline(string text);// __Under Line the text__
-    string OneLineCode(string text);//``Line of code`
-    string MultiLineCode(string text); //``` Multi line of code```
-    string Subsection(string text); //    Four Space    
-    string Paragraph(string text);//Space between text
-    string Quote(string text);// > Quote
-    string Title(string text, int level);// ## Title
-    string LineTitleMain(string text); // Title ==============
-    string LineTitleSecond(string text); // Title -----------
-    #endregion
-
-    #region EASY
-    string Image(string description, string url); //![alt](url)
-    string Link(string description, string url); //[link](url)
-
-    string LineBreak();//----------
-    string LineReturn(string text);// Return with two space at end  
-
-    string SimpleList(string[] elements);
-    string SimpleEnumeration(string[] elements);
-    string SimpleCheckList(string[] elements, bool [] checkValue);
-
-    #endregion
-    #region COMPLEX
-    string EmtyArray(int row, int col); // See documentation
-
-    #endregion
-
-
-    #region FIND
-    string FindImages(string text);
-    string FindLinks(string text);
-    //...
-    #endregion
-
-    #region COMPLEMENTARY
-    bool IsPathFromWeb(string urlOrPath);
-    bool IsPathFromDevice(string urlOrPath);
-    bool IsPathRelative(string path);
-    bool IsPathAbsolute(string path);
-    string GetFilePathExtension(string path);
-
-    bool IsImageFile(string filePath);
-    bool IsMarkdownFile(string filePath);
-
-    #endregion
-}
 
 public class WikiGitUtilityMono : MonoBehaviour
 {

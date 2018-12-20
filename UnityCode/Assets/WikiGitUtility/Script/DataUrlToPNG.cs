@@ -18,8 +18,8 @@ public class DataUrlToPNG : MonoBehaviour
 
 
         m_data = Regex.Match(m_dataUrl, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-        
-        byte [] binData = Convert.FromBase64String(m_data);
+
+        byte[] binData = Convert.FromBase64String(m_data);
         m_dataUrl = "";
         File.WriteAllBytes(Application.dataPath + "/../dd.png", binData);
 

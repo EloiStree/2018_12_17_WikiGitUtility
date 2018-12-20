@@ -37,10 +37,7 @@ public class FindMarkdownFiles : MonoBehaviour
 
     public List<MarkdownFileWithText> CheckForMarkdownFilesInProject() {
         ResetValues();
-        if (!Directory.Exists(m_gitProjetPath)) {
-            return m_markdownFiles ;
-        }
-        m_mdFiles = Directory.GetFiles(@m_gitProjetPath, "*.md", SearchOption.AllDirectories);
+        m_mdFiles= MarkdownUtility.Default.GetMarkdownFilesInDirectory(m_gitProjetPath,true);
         for (int i = 0; i < m_mdFiles.Length; i++)
         {
             MarkdownFileWithText file = new MarkdownFileWithText(m_mdFiles[i],m_gitProjetPath, false);

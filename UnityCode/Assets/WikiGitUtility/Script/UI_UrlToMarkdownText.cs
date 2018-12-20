@@ -44,7 +44,8 @@ public class UI_UrlToMarkdownText : MonoBehaviour
     private void DownloadYoutube(string value)
     {
         string youtubeUrl = YoutubeThumbnail.GetImageUrlFromUrl(value,(YoutubeThumbnail.YoutubeImageType) m_dropdown.value);
-        SetText( string.Format("[![{0}]({2})]({1})  \n{1}", m_altText.text, value, youtubeUrl));
+        string txt = MarkdownUtility.Default.YoutubeImageAsText(m_altText.text,value, (YoutubeImageType) m_dropdown.value, true );
+        SetText( txt);
         StartCoroutine(StartDownloadPreview(youtubeUrl));    
     }
     public string urlYoutube;
@@ -87,7 +88,7 @@ public class UI_UrlToMarkdownText : MonoBehaviour
 
     private string LinkTheText(string text, string url)
     {
-        return "[" + text.Trim() + "](" + url.Trim() + ")";
+        return MarkdownUtility.Default.Link(text, url);
     }
 
     private string GetYoutubeImageUrl()

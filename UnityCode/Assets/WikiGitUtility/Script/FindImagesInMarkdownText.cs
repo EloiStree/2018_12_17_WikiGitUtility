@@ -12,10 +12,7 @@ public class FindImagesInMarkdownText : MonoBehaviour
     [SerializeField]
     [TextArea(0,10)]
     string m_textInFile;
-    // Source: https://stackoverflow.com/questions/36391979/find-markdown-image-syntax-in-string-in-java
-    //string m_imageMarkDownFormat = "!\\[[^\\]]+\\]\\([^)]+\\)";
-    string m_imageMarkDownFormat = "!\\[[^\\]]*?\\]\\([^)]+\\)";
-    
+   
 
     [SerializeField]
     MarkdownImageDetectedEvent  m_imageDetected;
@@ -40,19 +37,19 @@ public class FindImagesInMarkdownText : MonoBehaviour
         m_imagesMarkdown = new List<MarkdownImageAsText>();
         m_imagesAsText = new List<string>();
 
-        MatchCollection collection = Regex.Matches(m_textInFile, m_imageMarkDownFormat);
-        foreach (Match match in collection)
+        string[] images = MarkdownUtility.Default.FindImages(text);
+        foreach (string image in images)
         {
-            m_imagesAsText.Add(match.Value);
+            m_imagesAsText.Add(image);
             try
             {
-                MarkdownImageAsText md = new MarkdownImageAsText(match.Value);
+                MarkdownImageAsText md = new MarkdownImageAsText(image);
                 m_imagesMarkdown.Add(md);
                 m_imageDetected.Invoke(md);
             }
             catch (Exception e)
             {
-                Debug.LogWarning("Impossible to convert as image:" + match.Value);
+                Debug.LogWarning("Impossible to convert as image:" + image);
             }
         }
     }
@@ -70,8 +67,6 @@ public class MarkdownImageDetectedEvent : UnityEvent<MarkdownImageAsText> { }
 [System.Serializable]
 public class MarkdownImageAsText {
     public string m_text;
-    public static string m_linkPattern = "\\]\\([^)]+\\)";
-    public static string m_labelPattern = "!\\[[^\\]]*?\\]\\(";
     public string m_label;
     public string m_link;
 
@@ -87,49 +82,34 @@ public class MarkdownImageAsText {
     }
 
     public string GetImageLink() {
-     Match match =  Regex.Match(m_text, m_linkPattern);
-
-        return match.Value.Substring(2, match.Value.Length - 3);
+        return MarkdownUtility.Default.GetLinkOfImage(m_text);
+    
     }
     public string GetImageLabel() {
-        Match match = Regex.Match(m_text, m_labelPattern);
-        return match.Value.Substring(2, match.Value.Length-4) ;
+
+        return MarkdownUtility.Default.GetDescriptionOfImage(m_text);
 
     }
     public bool IsImagesFolder() {
-        string link = GetImageLink();
-        return link.ToLower().IndexOf("image/")==0 ;
+        return MarkdownUtility.Default.IsPathFromRelativeFolder(GetImageLink(), "image");
+        
     }
     public bool IsWebLink() {
-        string link = GetImageLink();
-        return link.ToLower().IndexOf("http://") ==0 || link.ToLower().IndexOf("https://")==0;
-    }
+        return MarkdownUtility.Default.IsPathFromWeb(GetImageLink());
+  }
 
     internal string GetFileExtension()
     {
-            string link = GetImageLink().ToLower();
-            if (link.IndexOf(".jpeg") >= 0)
-                return "jpeg";
-            if (link.IndexOf(".jpg") >= 0)
-                return "jpg";
-            if (link.IndexOf(".gif") >= 0)
-                return "gif";
-            if (link.IndexOf(".png") >= 0)
-                return "png";
-
-
-
-        return "";
+        return MarkdownUtility.Default.GetFilePathExtension(GetImageLink());
         
     }
 
     internal void SetUrlTo(string newUrl)
     {
-        m_text = string.Format("![{0}]({1})", GetImageLabel(), newUrl);
-    }
+        m_text = MarkdownUtility.Default.Image(GetImageLabel(), newUrl);   }
     internal void SetLabelTo(string newLabel)
     {
-        m_text = string.Format("![{0}]({1})", newLabel,GetImageLink());
+        m_text = MarkdownUtility.Default.Image(newLabel,GetImageLink());
     }
 
     internal string GetText()
@@ -139,7 +119,7 @@ public class MarkdownImageAsText {
 
     internal static MarkdownImageAsText CreateMarkdownImage(string alt, string url)
     {
-        string md = string.Format("![{0}]({1})", alt==""?" ":alt, url== "" ? " " : url);
+        string md = MarkdownUtility.Default.Image(alt, url);
         return new MarkdownImageAsText(md);
     }
 }
